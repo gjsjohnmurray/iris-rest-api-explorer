@@ -1,20 +1,67 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { makeRESTRequest } from './makeRESTRequest';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export interface IWebServerSpec {
+    scheme?: string;
+    host: string;
+    port: number;
+    pathPrefix?: string;
+}
 
+export interface IServerSpec {
+    name: string;
+    webServer: IWebServerSpec;
+    username?: string;
+    password?: string;
+    description?: string;
+}
+
+export interface ISwaggerUrl {
+	name: string;
+	url: string;
+}
+
+export let serverManagerApi: any; 
+export async function activate(context: vscode.ExtensionContext) {
+	const smExtension = vscode.extensions.getExtension('intersystems-community.servermanager');
+	if (!smExtension) {
+		vscode.window.showErrorMessage('The InterSystems Server Manager extension is not installed.');
+		return;
+	}
+	if (!smExtension.isActive) {
+		await smExtension.activate();
+	}
+	serverManagerApi = smExtension.exports;
+  
 	const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 	const ourAssetPath = vscode.Uri.joinPath(context.extensionUri, 'assets').fsPath;
 
-	const disposable = vscode.commands.registerCommand('iris-rest-api-explorer.helloWorld', async () => {
-    	// Create and show a new webview
+	context.subscriptions.push(vscode.commands.registerCommand('iris-rest-api-explorer.intersystems-servermanager', async (serverTreeItem) => {
+        const idArray = serverTreeItem.id.split(':');
+        const serverId = idArray[1];
+		const serverSpec = await serverManagerApi.getServerSpec(serverId);
+		if (!serverSpec) {
+			vscode.window.showErrorMessage(`Server definition '${serverId}' not found.`);
+			return;
+		}
+
+		const response = await makeRESTRequest('GET', serverSpec);
+		if (!response) {
+			vscode.window.showErrorMessage(`Failed to retrieve server '${serverId}' information.`);
+			return;
+		}
+		const urls: ISwaggerUrl[] = response.data.map((item: any): ISwaggerUrl => {
+			return { name: item.name, url: item.swaggerSpec };
+		});
+		if (urls.length === 0) {
+			vscode.window.showErrorMessage(`No REST webapps found on server '${serverId}'.`);
+			return;
+		}
+		// Create and show a new webview
 		const panel = vscode.window.createWebviewPanel(
-		'georgejames.iris-rest-api-explorer.swaggerUi', // Identifies the type of the webview. Used internally
-		'REST API Explorer', // Title of the panel displayed to the user
-		vscode.ViewColumn.One, // Editor column to show the new webview panel in.
+		'georgejames.iris-rest-api-explorer.swaggerUi',
+		`REST API Explorer (${serverId})`,
+		vscode.ViewColumn.One,
 		{
 			localResourceRoots: [
 				vscode.Uri.file(swaggerUiAssetPath),
@@ -44,9 +91,7 @@ export function activate(context: vscode.ExtensionContext) {
 </html>`;
 
 		webview.html = html;
- 	});
-
-	context.subscriptions.push(disposable);
+ 	}));
 }
 
 export function deactivate() {
