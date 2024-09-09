@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { makeRESTRequest } from './makeRESTRequest';
+import { makeRESTRequest, resolveCredentials } from './makeRESTRequest';
 
 export interface IWebServerSpec {
     scheme?: string;
@@ -39,19 +39,26 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('iris-rest-api-explorer.intersystems-servermanager', async (serverTreeItem) => {
         const idArray = serverTreeItem.id.split(':');
         const serverId = idArray[1];
-		const serverSpec = await serverManagerApi.getServerSpec(serverId);
+		const serverSpec: IServerSpec = await serverManagerApi.getServerSpec(serverId);
 		if (!serverSpec) {
 			vscode.window.showErrorMessage(`Server definition '${serverId}' not found.`);
 			return;
 		}
 
+		// Always resolve credentials because even though the /api/mgmnt endpoint may permit unauthenticated access the endpoints we are interested in may not.
+		await resolveCredentials(serverSpec);
 		const response = await makeRESTRequest('GET', serverSpec);
 		if (!response) {
 			vscode.window.showErrorMessage(`Failed to retrieve server '${serverId}' information.`);
 			return;
 		}
+		const portSuffix =
+			serverSpec.webServer.scheme === 'http' && serverSpec.webServer.port === 80 ? ''
+			: serverSpec.webServer.scheme === 'https' && serverSpec.webServer.port === 443 ? ''
+			: ':' + serverSpec.webServer.port;
+		const prefixBasePath = `${serverSpec.webServer.scheme}://${serverSpec.webServer.host}${portSuffix}${serverSpec.webServer.pathPrefix}`;
 		const urls: ISwaggerUrl[] = response.data.map((item: any): ISwaggerUrl => {
-			return { name: item.name, url: item.swaggerSpec };
+			return { name: item.name, url: prefixBasePath + item.swaggerSpec };
 		});
 		if (urls.length === 0) {
 			vscode.window.showErrorMessage(`No REST webapps found on server '${serverId}'.`);
@@ -71,6 +78,18 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 		);
 		const webview = panel.webview;
+		webview.onDidReceiveMessage(
+			message => {
+				switch (message.command) {
+					case 'ready':
+						webview.postMessage({ command: 'load', urls: urls, serverSpec });
+						return;
+				}
+			},
+			undefined,
+			context.subscriptions
+		);
+	
 
 		const html = `<!DOCTYPE html>
 <html lang="en">
