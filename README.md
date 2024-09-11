@@ -6,7 +6,7 @@ This extension works with the [InterSystems Server Manager](https://marketplace.
 
 1. Hover over a server in the InterSystems Servers view.
 
-2. Click on the button to launch the explorer, or to switch to the one previously opened for this server.
+2. Click on the `{}` button to launch the explorer, or to switch to the one previously opened for this server.
 
 The first time this extension accesses a server you will be prompted to permit it to use the server connection credentials.
 
