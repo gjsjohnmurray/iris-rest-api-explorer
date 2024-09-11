@@ -1,71 +1,22 @@
-# iris-rest-api-explorer README
+# InterSystems IRIS REST API Explorer
 
-This is the README for your extension "iris-rest-api-explorer". After writing up a brief description, we recommend including the following sections.
+This extension works with the [InterSystems Server Manager](https://marketplace.visualstudio.com/items?itemName=intersystems-community.servermanager) extension to launch a tab in which you can explore the REST APIs published by a server.
 
-## Features
+## Use
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+1. Hover over a server in the InterSystems Servers view.
 
-For example if there is an image subfolder under your extension project workspace:
+2. Click on the button to launch the explorer, or to switch to the one previously opened for this server.
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+The first time this extension accesses a server you will be prompted to permit it to use the server connection credentials.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+See the [CHANGELOG](CHANGELOG.md) for changes in each release.
 
-### 1.0.0
+## About George James Software
 
-Initial release of ...
+Known for our expertise in InterSystems technologies, George James Software has been providing innovative software solutions for over 35 years. We focus on activities that can help our customers with the support and maintenance of their systems and applications. Our activities include consulting, training, support, and developer tools - with the Serenji debugger and Deltanji source control being our flagship tools. These tools augment InterSystems' technology and can help customers with the maintainability and supportability of their applications over the long term. 
 
-### 1.0.1
+To find out more, go to our website - [georgejames.com](https://georgejames.com) 
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

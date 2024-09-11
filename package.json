@@ -1,13 +1,17 @@
 {
   "name": "iris-rest-api-explorer",
-  "displayName": "InterSystems IRIS REST API SwaggerUI Explorer",
-  "description": "Explore IRIS REST APIs using SwaggerUI",
-  "version": "0.0.1",
+  "displayName": "InterSystems IRIS REST API Explorer",
+  "description": "Use SwaggerUI to explore REST APIs on InterSystems IRIS servers",
+  "version": "0.0.1-SNAPSHOT",
   "publisher": "georgejames",
   "engines": {
     "vscode": "^1.92.0"
   },
-  "contributors": [
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gjsjohnmurray/iris-rest-api-explorer"
+  },
+"contributors": [
     {
       "name": "John Murray",
       "email": "johnm@georgejames.com"
@@ -64,13 +68,14 @@
   "dependencies": {
     "axios": "^1.7.7",
     "axios-cookiejar-support": "^5.0.2",
-    "tough-cookie": "^5.0.0",
+    "tough-cookie": "^4.1.4",
     "swagger-ui-dist": "~5.17.14"
   },
   "devDependencies": {
     "@types/vscode": "^1.92.0",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/tough-cookie": "4.0.5",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.11.0",
     "eslint": "^8.57.0",
