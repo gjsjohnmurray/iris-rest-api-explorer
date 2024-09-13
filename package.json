@@ -2,7 +2,7 @@
   "name": "iris-rest-api-explorer",
   "displayName": "InterSystems IRIS REST API Explorer",
   "description": "Use SwaggerUI to explore REST APIs on InterSystems IRIS servers",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "0.0.2-SNAPSHOT",
   "publisher": "georgejames",
   "engines": {
     "vscode": "^1.92.0"
