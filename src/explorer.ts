@@ -46,7 +46,7 @@ export class Explorer extends vscode.Disposable {
 		// Create and show a new webview
 		const panel = vscode.window.createWebviewPanel(
             'georgejames.iris-rest-api-explorer.swaggerUi',
-            `REST API Explorer (${this.serverId})`,
+            `REST APIs (${this.serverId})`,
             vscode.ViewColumn.Active,
             {
                 localResourceRoots: [
