@@ -1,2 +1,2 @@
-## 0.0.1 [dd-Mmm-yyyy]
+## 1.0.0 [17-Sep-2024]
 * Initial release
