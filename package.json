@@ -7,11 +7,12 @@
   "engines": {
     "vscode": "^1.92.0"
   },
+  "icon": "media/extension-icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/gjsjohnmurray/iris-rest-api-explorer"
   },
-"contributors": [
+  "contributors": [
     {
       "name": "John Murray",
       "email": "johnm@georgejames.com"
