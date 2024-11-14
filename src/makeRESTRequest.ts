@@ -1,11 +1,10 @@
+import * as vscode from "vscode";
 import axios, { AxiosResponse } from "axios";
 import axiosCookieJarSupport from "axios-cookiejar-support";
 import tough = require("tough-cookie");
-import * as vscode from "vscode";
-import { IServerSpec } from "./extension";
+import { AUTHENTICATION_PROVIDER, IServerSpec } from "@intersystems-community/intersystems-servermanager";
 import * as https from 'https';
-
-const AUTHENTICATION_PROVIDER = "intersystems-server-credentials";
+import { serverManagerApi } from "./extension";
 
 /**
  * Cookie jar for REST requests to InterSystems servers.
@@ -138,16 +137,19 @@ export async function resolveCredentials(serverSpec: IServerSpec) {
     // This arises if setting says to use authentication provider
     if (typeof serverSpec.password === "undefined") {
         const scopes = [serverSpec.name, serverSpec.username || ""];
+                
+        // Handle Server Manager extension version < 3.8.0
+        const account = serverManagerApi.getAccount ? serverManagerApi.getAccount(serverSpec) : undefined;
         let session = await vscode.authentication.getSession(
             AUTHENTICATION_PROVIDER,
             scopes,
-            { silent: true },
+            { silent: true, account },
         );
         if (!session) {
             session = await vscode.authentication.getSession(
                 AUTHENTICATION_PROVIDER,
                 scopes,
-                { createIfNone: true },
+                { createIfNone: true, account },
             );
         }
         if (session) {

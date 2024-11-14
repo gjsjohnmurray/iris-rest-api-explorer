@@ -1,20 +1,6 @@
 import * as vscode from 'vscode';
+import { ServerManagerAPI } from "@intersystems-community/intersystems-servermanager";
 import { Explorer } from './explorer';
-
-export interface IWebServerSpec {
-    scheme?: string;
-    host: string;
-    port: number;
-    pathPrefix?: string;
-}
-
-export interface IServerSpec {
-    name: string;
-    webServer: IWebServerSpec;
-    username?: string;
-    password?: string;
-    description?: string;
-}
 
 export interface ISwaggerUrl {
 	name: string;
@@ -27,7 +13,7 @@ export let ourAssetPath: string | undefined = undefined;
 // Map to limit to one explorer per server
 export const mapExplorers: Map<string, Explorer> = new Map<string, Explorer>();
 
-export let serverManagerApi: any; 
+export let serverManagerApi: ServerManagerAPI; 
 export async function activate(context: vscode.ExtensionContext) {
 	ourAssetPath = vscode.Uri.joinPath(context.extensionUri, 'assets').fsPath;
 
