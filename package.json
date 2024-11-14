@@ -2,10 +2,10 @@
   "name": "iris-rest-api-explorer",
   "displayName": "InterSystems REST API Explorer",
   "description": "Use SwaggerUI to explore REST APIs on InterSystems servers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "georgejames",
   "engines": {
-    "vscode": "^1.92.0"
+    "vscode": "^1.93.0"
   },
   "icon": "media/extension-icon.png",
   "repository": {
@@ -73,7 +73,8 @@
     "swagger-ui-dist": "~5.17.14"
   },
   "devDependencies": {
-    "@types/vscode": "^1.92.0",
+    "@intersystems-community/intersystems-servermanager": "^3.8.0",
+    "@types/vscode": "^1.93.0",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
     "@types/tough-cookie": "4.0.5",

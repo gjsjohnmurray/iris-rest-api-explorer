@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { makeRESTRequest, resolveCredentials } from './makeRESTRequest';
-import { IServerSpec, ISwaggerUrl, mapExplorers, ourAssetPath, serverManagerApi, swaggerUiAssetPath } from './extension';
+import { IServerSpec } from "@intersystems-community/intersystems-servermanager";
+import { ISwaggerUrl, mapExplorers, ourAssetPath, serverManagerApi, swaggerUiAssetPath } from './extension';
 
 export class Explorer extends vscode.Disposable {
 
@@ -20,7 +21,7 @@ export class Explorer extends vscode.Disposable {
         if (!ourAssetPath) {
             return 'Error: ourAssetPath is not set.';
         }
-		const serverSpec: IServerSpec = await serverManagerApi.getServerSpec(this.serverId);
+		const serverSpec = await serverManagerApi.getServerSpec(this.serverId);
 		if (!serverSpec) {
 			return `Server definition '${this.serverId}' not found.`;
 		}
