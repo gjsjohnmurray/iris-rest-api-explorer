@@ -25,21 +25,44 @@ export class Explorer extends vscode.Disposable {
 			return `Server definition '${this.serverId}' not found.`;
 		}
 
-
-		// Always resolve credentials because even though the /api/mgmnt endpoint may permit unauthenticated access the endpoints we are interested in may not.
-		await resolveCredentials(serverSpec);
-		const response = await makeRESTRequest('GET', serverSpec);
-		if (!response) {
-			return `Failed to retrieve server '${this.serverId}' information.`;
-		}
 		const portSuffix =
 			serverSpec.webServer.scheme === 'http' && serverSpec.webServer.port === 80 ? ''
 			: serverSpec.webServer.scheme === 'https' && serverSpec.webServer.port === 443 ? ''
 			: ':' + serverSpec.webServer.port;
 		const prefixBasePath = `${serverSpec.webServer.scheme}://${serverSpec.webServer.host}${portSuffix}${serverSpec.webServer.pathPrefix}`;
+
+		// Always resolve credentials because even though the /api/mgmnt endpoint may permit unauthenticated access the endpoints we are interested in may not.
+		await resolveCredentials(serverSpec);
+
+        // Get so-called 'legacy' REST apps by making a request to the /api/mgmnt/ endpoint
+		let response = await makeRESTRequest('GET', serverSpec);
+		if (!response) {
+			return `Failed to retrieve server '${this.serverId}' information.`;
+		}
 		const urls: ISwaggerUrl[] = response.data.map((item: any): ISwaggerUrl => {
 			return { name: item.name, url: prefixBasePath + item.swaggerSpec };
 		});
+
+        // Get any v2 REST apps by making a request to the /api/mgmnt/v2/ endpoint
+        response = await makeRESTRequest('GET', serverSpec, { apiVersion: 2, namespace: '', path: '' });
+		if (response) {
+            response.data.forEach((item: any) => {
+                let name = item.name;
+                // v2 apps are named by their class name, but we show the optional webApplications property if it exists
+                if (item.webApplications) {
+                    name = item.webApplications;
+                } else {
+                    if (urls.find((url) => url.name === name)) {
+                        // Already found a legacy app with this name
+                        name = '';
+                    }
+                }
+                if (name !== '') {
+                    urls.push({ name: item.name, url: prefixBasePath + item.swaggerSpec });
+                }
+            });
+		}
+
 		if (urls.length === 0) {
 			return `No REST webapps found on server '${this.serverId}'.`;
 		}
