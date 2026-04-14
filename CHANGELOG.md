@@ -1,3 +1,6 @@
+## 1.0.3 [14-Apr-2026]
+* Update dependencies in response to GitHub security alerts (no functional change).
+
 ## 1.0.2 [19-Nov-2025]
 * Update dependencies in response to GitHub security alerts (no functional change).
 
