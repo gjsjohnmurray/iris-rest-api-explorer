@@ -2,7 +2,7 @@
   "name": "iris-rest-api-explorer",
   "displayName": "InterSystems REST API Explorer",
   "description": "Use SwaggerUI to explore REST APIs on InterSystems servers",
-  "version": "1.0.3-SNAPSHOT",
+  "version": "1.0.4",
   "publisher": "georgejames",
   "engines": {
     "vscode": "^1.93.0"
@@ -83,7 +83,7 @@
     "eslint": "^8.57.0",
     "typescript": "^5.4.5",
     "ts-loader": "^9.5.1",
-    "webpack": "^5.94.0",
+    "webpack": "^5.106.2",
     "webpack-cli": "^5.1.4",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0"
